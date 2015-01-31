@@ -71,7 +71,7 @@ def init():
     }
     symbol_type = {
         'greater': '>',
-        'less': '<',
+        'lesser': '<',
         'neq': "\\neq"
     }
     normalDiagram(p0, ps, diagram_type=d_type[h_type])

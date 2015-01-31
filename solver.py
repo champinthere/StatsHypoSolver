@@ -38,7 +38,11 @@ def step4(p0, ps, samp_size, sig_level, diagram_type="one_sided_right"):
     if diagram_type == 'one_sided_right':
         prob = 1 - rv.cdf(zscore)
         pvalue = prob
-    text += "\\[ P(\\hat{p} %s %.5f) = %.7f\\]\n" % (raster_symbol, ps, prob)
+    elif diagram_type == 'one_sided_left':
+        prob = rv.cdf(zscore)
+        pvalue = prob
+        raster_symbol = "<"
+    text += "\\[ P(\\hat{p} %s %.5f) = %.8f\\]\n" % (raster_symbol, ps, prob)
     symbol = '>' if pvalue >= sig_level else '<'
     text += "\\[ \\text{p-value} = %.7f %s %.2f = \\alpha\\]" % (pvalue, symbol, sig_level)
     return (text, pvalue, pvalue <= sig_level)
@@ -53,7 +57,7 @@ def step5(p0, context, low_enough, diagram_type="one_sided_right"):
             "is actually %.5f in favor of the alternative hypothesis that it is %s.\n\n"
     dict_values = {
         'one_sided_right': 'more',
-        'one_sided_left': 'left',
+        'one_sided_left': 'less',
         'two_sided': 'different'
     }
     text = text % (context, p0, dict_values[diagram_type])
