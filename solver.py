@@ -27,7 +27,8 @@ def step3(p0, samp_size):
 
 def step4(p0, ps, samp_size, sig_level, diagram_type="one_sided_right"):
     sigma = np.sqrt(p0 * (1 - p0) / samp_size)
-    text = "\\includegraphics[scale=.25]{diagram}\n"
+    text = "Distribution of \\(\\hat{p}\\):\n"
+    text += "\\begin{center}\\includegraphics[scale=.8]{diagram}\\end{center}\n"
     zscore = (ps - p0) / sigma
     rv = norm()
     text += "\\[z = \\frac{%.5f - %.5f}{%.6f} = %.4f\\]\n" % (ps, p0, sigma, zscore)

@@ -2,6 +2,8 @@
 *~
 *.DS_Store
 *.ltx
+*.log
+*.aux
 *.pdf
 *.pyc
 *.png
