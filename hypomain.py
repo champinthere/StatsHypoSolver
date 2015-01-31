@@ -6,6 +6,9 @@ import time, os, solver
 mpl.rcParams['mathtext.fontset'] = 'stix'
 mpl.rcParams['font.family'] = 'STIXGeneral'
 
+def sh(somefloat):
+    return "%.3f" % somefloat
+
 def normalDiagram(mean, sample, diagram_type='one_sided_right'):
     x = np.arange(-3, 3, .01)
     y = np.exp(-(x ** 2) / 2) / np.sqrt(2 * np.pi)
@@ -27,22 +30,26 @@ def normalDiagram(mean, sample, diagram_type='one_sided_right'):
     right_tail_cutoff = int(len(x) * (1 - tail_constant))
 
     if diagram_type == 'one_sided_left':
-        plt.xticks((left_tail_value, 0), (sample, mean), fontsize="9")
+        plt.xticks((left_tail_value, 0), (sh(sample), sh(mean)), fontsize="10")
         plt.fill_between(x[:left_tail_cutoff], y[:left_tail_cutoff], color=shade_color)
 
     elif diagram_type == 'one_sided_right':
-        plt.xticks((0, right_tail_value), (mean, sample), fontsize="10") 
+        plt.xticks((0, right_tail_value), (sh(mean), sh(sample)), fontsize="10") 
         plt.fill_between(x[right_tail_cutoff:], y[right_tail_cutoff:], color=shade_color)
-
-    # plt.xticks((0, xvalue), (.746, .831), fontsize="13")
-    # cutoff = int(len(x) * .72)
-    # plt.fill_between(x[cutoff:], y[cutoff:], color='#99bbee')
+    
+    elif diagram_type == 'two_sided':
+        sample_left = min([sample, 2 * mean - sample])
+        sample_right = max([sample, 2 * mean - sample])
+        plt.xticks((left_tail_value, 0, right_tail_value),
+                (sh(sample_left), sh(mean), sh(sample_right)), fontsize="10")
+        plt.fill_between(x[:left_tail_cutoff], y[:left_tail_cutoff], color=shade_color)
+        plt.fill_between(x[right_tail_cutoff:], y[right_tail_cutoff:], color=shade_color)
 
     plt.savefig("diagram.png")
     plt.close()
 
 latexHeader = '''
-\\documentclass[11pt]{article}
+\\documentclass[10pt]{article}
 \\usepackage{lmodern}
 \\usepackage[margin=.8in]{geometry}
 \\usepackage[T1]{fontenc}

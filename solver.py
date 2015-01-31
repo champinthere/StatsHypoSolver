@@ -35,6 +35,7 @@ def step4(p0, ps, samp_size, sig_level, diagram_type="one_sided_right"):
     pvalue = 0.0
     prob = 0.0
     raster_symbol = ">"
+    additional = ""
     if diagram_type == 'one_sided_right':
         prob = 1 - rv.cdf(zscore)
         pvalue = prob
@@ -42,9 +43,14 @@ def step4(p0, ps, samp_size, sig_level, diagram_type="one_sided_right"):
         prob = rv.cdf(zscore)
         pvalue = prob
         raster_symbol = "<"
+    elif diagram_type == 'two_sided':
+        prob = 1 - rv.cdf(np.abs(zscore))
+        pvalue = 2 * prob
+        raster_symbol = ">" if zscore > 0 else "<"
+        additional = "%.8f \\cdot 2 = " % prob
     text += "\\[ P(\\hat{p} %s %.5f) = %.8f\\]\n" % (raster_symbol, ps, prob)
     symbol = '>' if pvalue >= sig_level else '<'
-    text += "\\[ \\text{p-value} = %.7f %s %.2f = \\alpha\\]" % (pvalue, symbol, sig_level)
+    text += "\\[ \\text{p-value} = %s%.8f %s %.2f = \\alpha\\]" % (additional, pvalue, symbol, sig_level)
     return (text, pvalue, pvalue <= sig_level)
 
 def step5(p0, context, low_enough, diagram_type="one_sided_right"):
