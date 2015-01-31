@@ -1,7 +1,7 @@
 import numpy as np
-import scipy as sp
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import solver
 mpl.rcParams['mathtext.fontset'] = 'stix'
 mpl.rcParams['font.family'] = 'STIXGeneral'
 
@@ -42,19 +42,22 @@ def normalDiagram(mean, sample, diagram_type='one_sided_right'):
 latexHeader = '''
 \\documentclass[11pt]{article}
 \\usepackage{lmodern}
+\\usepackage[margin=.8in]{geometry}
 \\usepackage[T1]{fontenc}
 \\usepackage{amsmath}
-\\linespread{1.25}
+\\linespread{1.17}
 \\usepackage{graphicx}
-\\usepackage{multicols}
+\\usepackage{multicol}
 \\begin{document}
+\\begin{multicols}{2}
 '''
 
 def init():
     result = ''
     result += latexHeader
-    alpha = input('significance level: ')
+    alpha = float(input('significance level: '))
     context = input('p = proportion of: ')
+    context_pop = input('population of: ')
     p0 = float(input('p0 is: '))
     ps = float(input('sample p is: '))
     samp_size = int(input('sample size: '))
@@ -70,4 +73,17 @@ def init():
         'neq': "\\neq"
     }
     normalDiagram(p0, ps, diagram_type=d_type[h_type])
-    result += '\end{document}'
+    result += solver.step1(p0, context, symbol_type[h_type])
+    result += solver.step2(p0, samp_size, context_pop)
+    result += solver.step3(p0, samp_size)
+    text, pvalue, low_enough = solver.step4(p0, ps, samp_size, alpha, diagram_type=d_type[h_type])
+    result += "\n\\textbf{Calculations}\n\n"
+    result += text
+    result += solver.step5(p0, context, low_enough, diagram_type=d_type[h_type])
+    result += "\n\\end{multicols}\n\\end{document}"
+    output_file = open('solved.ltx', 'w')
+    output_file.write(result)
+    output_file.close()
+
+if __name__ == '__main__':
+    init()

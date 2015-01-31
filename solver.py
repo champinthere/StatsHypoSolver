@@ -9,12 +9,12 @@ def step1(p0, context, symbol):
 
 
 def step2(p0, samp_size, context):
-  text = "Conditions\n\n"
+  text = "\\textbf{Conditions}\n\n"
   text += "\\begin{enumerate}\n"
   text += "\\item Random Sample (Stated)\n"
   text += "\\item %d < 10 percent of %s\n" % (samp_size, context)
-  text += "\\item \\(np_0 = (%d)(%.5f) = %.2f \\geq 10\\)\n" % (samp_size, p0, samp_size * p0)
-  text += "\\item \\(nq_0 = (%d)(%.5f) = %.2f \\geq 10\\)\n" % (samp_size, 1 - p0, samp_size * (1 - p0))
+  text += "\\item \\(np_0 = (%d)(%.5f) = %.2f \\geq 10\\)\n\n" % (samp_size, p0, samp_size * p0)
+  text += "\\(nq_0 = (%d)(%.5f) = %.2f \\geq 10\\)\n" % (samp_size, 1 - p0, samp_size * (1 - p0))
   text += "\\end{enumerate}"
   return text
 
@@ -27,7 +27,7 @@ def step3(p0, samp_size):
 
 def step4(p0, ps, samp_size, sig_level, diagram_type="one_sided_right"):
     sigma = np.sqrt(p0 * (1 - p0) / samp_size)
-    text = ""
+    text = "\\includegraphics[scale=.25]{diagram}\n"
     zscore = (ps - p0) / sigma
     rv = norm()
     text += "\\[z = \\frac{%.5f - %.5f}{%.6f} = %.4f\\]\n" % (ps, p0, sigma, zscore)
@@ -42,7 +42,7 @@ def step4(p0, ps, samp_size, sig_level, diagram_type="one_sided_right"):
     text += "\\[ \\text{p-value} = %.7f %s %.2f = \\alpha\\]" % (pvalue, symbol, sig_level)
     return (text, pvalue, pvalue <= sig_level)
 
-def step5(p0, context, low_enough, diagram_type="one_sided_right")
+def step5(p0, context, low_enough, diagram_type="one_sided_right"):
     if not low_enough:
         text = "With such a high p-value, I fail to reject the null hypothesis that the proportion of %s is actually %.5f" \
                 % (context, p0)
