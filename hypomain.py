@@ -66,7 +66,7 @@ def init():
     h_type = input('hypothesis type (greater, lesser, neq): ')
     d_type = {
         'greater': 'one_sided_right',
-        'less': 'one_sided_left',
+        'lesser': 'one_sided_left',
         'neq': 'two_sided'
     }
     symbol_type = {
